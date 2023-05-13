@@ -2,21 +2,30 @@ import React,{useState} from "react";
 import {Text, View, Pressable, StyleSheet, FlatList, TextInput} from "react-native";
 import CustonInput from "./customInput";
 import CustomButton from "./customBottom";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Home from "../Home";
-import { NavigationContainer } from "@react-navigation/native";
+import auth,{ FirebaseAuthTypes } from "@react-native-firebase/auth";
 const SignInScreen=({navigation}:{navigation:any})=>{
-
+const[isLoading,setIsloading]=useState(false)
+const [mail,setMail]=useState('');
+const [password,setPassword]=useState('');
+const[error,setError]=useState("");
 const onSignInPressed=()=>{
-    console.log('Sign In')
 
-    navigation.navigate("Borsa")
+    auth().signInWithEmailAndPassword(mail,password)
+    .then(userCredential=>{
+     const user=userCredential.user;
+    
+    }).catch(e=>{
+     console.log(e)
+    })
+    console.log('Sign In')
+    setIsloading(true)
+  
+    //navigation.navigate("Borsa")
 }
 const onCreateAccount=()=>{
-    navigation.navigate("SignUp")
+    navigation.navigate("Signup")
 }
-const [userName,setUserName]=useState('');
-const [password,setPassword]=useState('');
+
     return(
 
        
@@ -25,9 +34,9 @@ const [password,setPassword]=useState('');
 
 
            <CustonInput
-           placeholder="UserName"
-           value={userName}
-           setValue={setUserName}
+           placeholder="E-mail"
+           value={mail}
+           setValue={setMail}
            secureTextEntry={false}
            
            />

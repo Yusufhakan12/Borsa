@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "36629287315",
+    "project_id": "yenibir-5d5e6",
+    "storage_bucket": "yenibir-5d5e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:36629287315:android:a4366819f8ea24d5df9866",
+        "android_client_info": {
+          "package_name": "com.borsa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "36629287315-qmv3bf04oo0ujlofgikqao9q946rd09d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNEu6gtmUEQ4_M_XlPMy0yw9NoMHYDY6U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "36629287315-qmv3bf04oo0ujlofgikqao9q946rd09d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
