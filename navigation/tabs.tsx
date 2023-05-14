@@ -10,7 +10,7 @@ import Favorite from "../screens/Favorite"
 import SignInScreen from "../screens/GirisEkran/SignInScreen"
 import SignUpScreen from "../screens/GirisEkran/SignUpScreen"
 import SignUpScreen2 from "../screens/GirisEkran/SignUpScreen2"
-import { useState } from "react"
+import WelcomeScreen from "../screens/GirisEkran/createAccount.tsx/welcomeScreen"
 import { useSelector } from "react-redux"
 import { RootState } from "../src/store"
 const Stack = createNativeStackNavigator()
@@ -39,6 +39,12 @@ const Sign=()=>{
       <Stack.Screen name="Signup2" component={SignUpScreen2}
        options={{
         headerTitle:"Sign up",
+        headerTitleAlign:"center"
+      }}
+      />
+        <Stack.Screen name="Welcome" component={WelcomeScreen}
+       options={{
+        headerShown:false,
         headerTitleAlign:"center"
       }}
       />

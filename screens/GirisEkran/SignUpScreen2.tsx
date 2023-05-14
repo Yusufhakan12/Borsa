@@ -51,7 +51,7 @@ const SignUpScreen2=({navigation}:{navigation:any})=>{
 
 
         //console.log('Sign In')
-        //navigation.navigate("SigIn")
+        navigation.navigate("Welcome")
     }
    
     return(
