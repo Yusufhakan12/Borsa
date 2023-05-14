@@ -23,3 +23,15 @@ export interface FavoriteState{
 export interface userState{
     user:boolean;
 }
+
+export interface typeState{
+    type:string
+}
+
+export interface typeCurrencyState{
+    typeCurrency:string
+}
+
+export interface SubeState{
+    Sube:string
+}

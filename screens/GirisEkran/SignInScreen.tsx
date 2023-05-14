@@ -59,7 +59,7 @@ setError(true);
 }
 const onCreateAccount=()=>{
     //navigation.navigate("Signup")
-    navigation.navigate("Welcome")
+    navigation.navigate("Signup")
 }
 
     return(

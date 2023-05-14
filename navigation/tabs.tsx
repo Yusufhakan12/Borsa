@@ -11,6 +11,9 @@ import SignInScreen from "../screens/GirisEkran/SignInScreen"
 import SignUpScreen from "../screens/GirisEkran/SignUpScreen"
 import SignUpScreen2 from "../screens/GirisEkran/SignUpScreen2"
 import WelcomeScreen from "../screens/GirisEkran/createAccount.tsx/welcomeScreen"
+import DovizScreen from "../screens/GirisEkran/createAccount.tsx/dovizScreen"
+import Sube from "../screens/GirisEkran/createAccount.tsx/subeScreen"
+import OnayliyorumScreen from "../screens/GirisEkran/createAccount.tsx/onayliyorumScreen"
 import { useSelector } from "react-redux"
 import { RootState } from "../src/store"
 const Stack = createNativeStackNavigator()
@@ -48,6 +51,25 @@ const Sign=()=>{
         headerTitleAlign:"center"
       }}
       />
+         <Stack.Screen name="Doviz" component={DovizScreen}
+       options={{
+        headerShown:false,
+        headerTitleAlign:"center"
+      }}
+      />
+        <Stack.Screen name="Sube" component={Sube}
+       options={{
+        headerShown:false,
+        headerTitleAlign:"center"
+      }}
+      />
+
+<Stack.Screen name="onayliyorum" component={OnayliyorumScreen}
+       options={{
+        headerShown:false,
+        headerTitleAlign:"center"
+      }}
+      />
     </Stack.Navigator>
   );
 }
@@ -63,8 +85,19 @@ const Homestack = () => {
           headerTitleStyle: { fontFamily: "TiltWarp-Regular", fontSize: 25 }
         }}
       > 
-      <Stack.Screen name="Borsa" component={Home} />
-      <Stack.Screen name="Detail" component={Detail} />
+      <Stack.Screen name="Borsa" component={Home} 
+      options={{
+        
+        headerTitleAlign:"center"
+      }}
+      />
+      <Stack.Screen name="Detail" component={Detail}
+      options={{
+      
+        headerTitleAlign:"center"
+      }}
+      
+      />
       </Stack.Navigator>
     );
    

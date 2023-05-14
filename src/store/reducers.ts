@@ -1,5 +1,5 @@
-import { FavoriteState,informationsState,userState } from "./models";
-import { FavoriteActionsTypes,ADD_FAVORİTE,REMOVE_FAVORİTE, userActionTypes, LOG_IN, nextActionTypes, NEXT } from "./actionTypes";
+import { FavoriteState,SubeState,informationsState,typeCurrencyState,typeState,userState } from "./models";
+import { FavoriteActionsTypes,ADD_FAVORİTE,REMOVE_FAVORİTE, userActionTypes, LOG_IN, nextActionTypes, NEXT, typeActionTypes, TYPE, typeCurrencyActionTypes, TYPE_CURRENCY, SubeActionTypes,SUBE } from "./actionTypes";
 import { useState } from "react";
 import { Crypto } from "../../models/crypto";
 const initialState:FavoriteState={
@@ -11,6 +11,16 @@ const userintialState:userState={
 }
 const NextintialState:informationsState={
     info:"",
+}
+const typeInitialState:typeState={
+    type:"",
+    
+}
+const typeCurrencyInitialState:typeCurrencyState={
+    typeCurrency:"",
+}
+const subeInitialState:SubeState={
+    Sube:"",
 }
 export function favoriteReducer(
    state=initialState,
@@ -61,5 +71,47 @@ export function NextReducer(
             };
            default:
             return state 
+    };
+};
+
+export function TypeReducer(
+    state=typeInitialState,
+    action:typeActionTypes
+):typeState{
+    switch(action.type){
+        case TYPE:
+            return{
+                type:action.payload
+            }
+            default:
+                return state
+    };
+};
+
+export function TypeCurrencyReducer(
+    state=typeCurrencyInitialState,
+    action:typeCurrencyActionTypes
+):typeCurrencyState{
+    switch(action.type){
+        case TYPE_CURRENCY:
+            return{
+                typeCurrency:action.payload
+            }
+            default:
+                return state
+    };
+};
+
+export function SubeReducer(
+    state=subeInitialState,
+    action:SubeActionTypes
+):SubeState{
+    switch(action.type){
+        case SUBE:
+            return{
+                Sube:action.payload
+            }
+            default:
+                return state
     }
 }
