@@ -1,5 +1,5 @@
 import React from "react";
-import { View,StyleSheet } from "react-native";
+import { View,StyleSheet,Text } from "react-native";
 import CustonInput from "./customInput";
 import CustomButton from "./customBottom";
 import axios from "axios";
@@ -11,19 +11,46 @@ const SignUpScreen2=({navigation}:{navigation:any})=>{
     const [password,setPassword]=useState('');
     const [mail,setMail]=useState('');
     const [passwordRepeat,setPasswordRepeat]=useState('');
-    const [Tel,setTel]=useState('');
+    const [mailerror,setMailError]=useState(false);
+    const [passworderror,setPasswordError]=useState(false);
+    const [equalderror,setEqualError]=useState(false);
+    const [exError,setExError]=useState(false);
+
     const onRegisterPressed=()=>{
-       auth().createUserWithEmailAndPassword(mail,password)
-       .then(userCredential=>{
-        const user=userCredential.user;
-       
-       }).catch(e=>{
-        console.log(e)
-       })
+
+        if(password!==passwordRepeat)
+        {
+            setEqualError(!equalderror)
+        }
+       else if(mail.length!==0&&password.length!==0&&passwordRepeat.length!==0)
+        {
+            auth().createUserWithEmailAndPassword(mail,password)
+            .then(userCredential=>{
+             const user=userCredential.user;
+             
+            }).catch(e=>{
+             
+                if(passwordRepeat.length<6||password.length<6)
+                {   
+                    setPasswordError(!passworderror);
+                    
+                }
+                if(e.code==='auth/email-already-in-use')
+                {
+                    setExError(!exError)
+                }
+               
+                else{
+                    setMailError(!mailerror);
+                 }
+
+            })
+        }
+      
     
 
 
-        console.log('Sign In')
+        //console.log('Sign In')
         //navigation.navigate("SigIn")
     }
    
@@ -36,6 +63,7 @@ const SignUpScreen2=({navigation}:{navigation:any})=>{
         secureTextEntry={false}
         
         />
+        {mailerror?<Text style={styles.error}>E-mail doğru formatta olmalı</Text>:null}
        
         <CustonInput
          placeholder="Password"
@@ -43,12 +71,17 @@ const SignUpScreen2=({navigation}:{navigation:any})=>{
          setValue={setPassword}
          secureTextEntry={true}
         />
+         {passworderror?<Text style={styles.error}>Şifre en az 6 karakterli olması gerekli</Text>:null}
          <CustonInput
          placeholder="Password Repeat"
          value={passwordRepeat}
          setValue={setPasswordRepeat}
          secureTextEntry={true}
         />
+
+        {equalderror?<Text style={styles.error}>Parolalar aynı olmalı</Text>:null}
+        {exError?<Text style={styles.error}>Boyle bir kullanıc var</Text>:null}
+
          <CustomButton
         onpress={onRegisterPressed}
         text="Register"
@@ -63,6 +96,10 @@ const styles=StyleSheet.create({
         alignItems:"center",
         padding:20,
         
+    },
+    error:{
+        fontSize:12 ,
+        color:"red"
     }
 })
 export default SignUpScreen2

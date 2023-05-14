@@ -2,16 +2,21 @@ import React from "react";
 import {Text, View, Pressable, StyleSheet, FlatList, TextInput} from "react-native";
 
 const CustonInput=({value,setValue,placeholder,secureTextEntry}:any)=>{
-
+  
+    
     return(
-        <View style={styles.container}>
+        <View style={[styles.container,value.length>0?{borderColor:"green"}:{borderColor:"black"}]}>
             <TextInput 
             value={value}
             onChangeText={setValue}
             placeholder={placeholder}
             secureTextEntry={secureTextEntry}
+        
             />
+       
         </View>
+        
+        
     );
 }
 const styles=StyleSheet.create({

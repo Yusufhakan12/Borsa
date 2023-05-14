@@ -1,5 +1,6 @@
-import { FavoriteActionsTypes,ADD_FAVORİTE,REMOVE_FAVORİTE } from "./actionTypes";
+import { FavoriteActionsTypes,userActionTypes,ADD_FAVORİTE,REMOVE_FAVORİTE,LOG_IN,NEXT, nextActionTypes } from "./actionTypes";
 import { Crypto } from "../../models/crypto";
+import { informationsState,infoModel } from "./models";
 
  export function addFavorite(newFavorite:Crypto):
  FavoriteActionsTypes{
@@ -19,3 +20,21 @@ import { Crypto } from "../../models/crypto";
         }
     };
  };
+
+ export function Login(user:boolean):
+ userActionTypes{
+    return{
+        type:LOG_IN,
+        payload:user
+    };
+ };
+
+ export function Next(informations:string):
+ nextActionTypes{
+    return{
+        type:NEXT,
+        payload:informations
+    }
+ }
+
+ 

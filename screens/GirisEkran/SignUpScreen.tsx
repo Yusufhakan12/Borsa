@@ -2,41 +2,58 @@ import React,{useState} from "react";
 import {Text, View, Pressable, StyleSheet, FlatList, TextInput} from "react-native";
 import CustonInput from "./customInput";
 import CustomButton from "./customBottom";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../src/store";
+import { Next } from "../../src/store/actions";
 
 const SignUpScreen=({navigation}:{navigation:any})=>{
+
+
+const [userName,setUserName]=useState('');
+const [error,setError]=useState(false);
+const info=useSelector((state:RootState)=>state.info)
+const dispatch=useDispatch();
+
     const onRegisterPressed=()=>{
-        console.log('Sign In')
-        navigation.navigate("Signup2")
+        
+    
+       if(userName.length===0)
+       {
+        setError(!error)
+       }
+       
+       
+        
+       
+        else{
+            navigation.navigate("Signup2")
+        }
+        
     }
-    const [userName,setUserName]=useState('');
-    const [identity,setidentity]=useState('');
-    const [surname,setSurname]=useState('');
-   
+    
+    
     return(
         <View style={styles.root}>
-         <CustonInput
-        placeholder="Name"
+        <CustonInput
+        placeholder="Full Name"
         value={userName}
         setValue={setUserName}
         secureTextEntry={false}
         
         />
       
-     
-         <CustonInput
-        placeholder="Surname"
-        value={surname}
-        setValue={setSurname}
-        secureTextEntry={false}
-        
-        />
+        {error?<Text style={styles.error}>This field cannot be left blank</Text>:null}
+       
          
         <CustomButton
-        onpress={onRegisterPressed}
-        text="Register"
+        onpress={()=>{dispatch(Next(userName));onRegisterPressed()}}
+        text="Next"
         />
+    
      </View>
+     
     );
+   
 }
 
 
@@ -45,6 +62,10 @@ const styles=StyleSheet.create({
         alignItems:"center",
         padding:20,
         
+    },
+    error:{
+        fontSize:12 ,
+        color:"red"
     }
 })
 export default SignUpScreen
