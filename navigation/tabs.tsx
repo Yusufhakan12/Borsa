@@ -13,6 +13,7 @@ import SignUpScreen2 from "../screens/GirisEkran/SignUpScreen2"
 import WelcomeScreen from "../screens/GirisEkran/createAccount.tsx/welcomeScreen"
 import DovizScreen from "../screens/GirisEkran/createAccount.tsx/dovizScreen"
 import Sube from "../screens/GirisEkran/createAccount.tsx/subeScreen"
+import ProfileScreen from "../screens/profileScreen"
 import OnayliyorumScreen from "../screens/GirisEkran/createAccount.tsx/onayliyorumScreen"
 import { useSelector } from "react-redux"
 import { RootState } from "../src/store"
@@ -169,6 +170,29 @@ const Tabs = () => {
             )
           }}
         />
+
+      <Tab.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+          
+            tabBarIcon: ({ focused }) => (
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
+                <MaterialIcons
+                  name={focused ? "person" : "person-outline"}
+                  size={30}
+                  color={focused ? "#e32f45" : "#748c94"}
+                />
+                <Text
+                  style={{ color: focused ? "#e32f45" : "#748c94", fontSize: 12 }}
+                >
+                  Profile
+                </Text>
+              </View>
+            )
+          }}
+        />
+
 
         
       </Tab.Navigator>

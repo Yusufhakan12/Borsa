@@ -3,13 +3,10 @@ import { Text, View,StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import CustomButton from "../customBottom";
 import { HESAP } from "../../../src/data/data";
-import { SelectList } from 'react-native-dropdown-select-list'
 import { RootState } from "../../../src/store";
 import CustomSelect from "./component/customSelect";
 import { Type } from "../../../src/store/actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { storeData } from "../../../storage";
-import { getData } from "../../../storage";
 const WelcomeScreen=({navigation}:{navigation:any})=>{
     const [category,setCategory]=useState("")
     const [error,setError]=useState(false);

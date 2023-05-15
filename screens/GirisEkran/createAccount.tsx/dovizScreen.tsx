@@ -3,7 +3,6 @@ import { Text, View,StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import CustomButton from "../customBottom";
 import { DOVİZ } from "../../../src/data/data";
-import { SelectList } from 'react-native-dropdown-select-list'
 import { RootState } from "../../../src/store";
 import { TypeCurrency } from "../../../src/store/actions";
 import CustomSelect from "./component/customSelect";
