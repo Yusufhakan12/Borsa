@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import {favoriteReducer,LoginReducer,NextReducer, TypeReducer,TypeCurrencyReducer, SubeReducer} from './store/reducers';
+import {favoriteReducer,LoginReducer,NextReducer, TypeReducer,TypeCurrencyReducer, SubeReducer, BakiyeReducer,ParaBirimiReducer, TiklananParaReducer} from './store/reducers';
 import {legacy_createStore as createStore} from 'redux'
 export const rootReducer = combineReducers({
   fav: favoriteReducer,
@@ -7,7 +7,10 @@ export const rootReducer = combineReducers({
   info:NextReducer,
   type:TypeReducer,
   currency:TypeCurrencyReducer,
-  sube:SubeReducer
+  sube:SubeReducer,
+  bakiye:BakiyeReducer,
+  paraBirimi:ParaBirimiReducer,
+  tiklanan:TiklananParaReducer
   // OtherReducer
 });
 export type RootState = ReturnType<typeof rootReducer>;

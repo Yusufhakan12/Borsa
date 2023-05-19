@@ -29,7 +29,7 @@ export const HESAP=[
 export const DOVİZ=[
     {
         key:'1',
-        value:'ABD doları'
+        value:'ABD DOLARI'
     },
     {
         key:'2',
@@ -49,7 +49,7 @@ export const DOVİZ=[
     },
     {
         key:'6',
-        value:'İSVİÇRE FRANGı'
+        value:'İSVİÇRE FRANGI'
     },
     {
         key:'7',

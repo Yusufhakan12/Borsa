@@ -20,7 +20,10 @@ const mapStateToProps=(state:RootState)=>({
 
 
 const Home = ({ navigation }:{navigation:any} ) => {
+  const deneme=1
   const myFavList=useSelector((state:RootState)=>state.fav)
+  const paraBirimi=useSelector((state:RootState)=>state.paraBirimi)
+  const currency=useSelector((state:RootState)=>state.currency)
   const map=myFavList.favorites.map((item)=>{
     return{
       Isim:item.Isim,
@@ -41,9 +44,10 @@ const dispatch=useDispatch();
       setCrypto(data)
     })
   }, [])
+  
 
- const navigate = (id: string) => {
-    navigation.navigate("Detail", {id: id});
+ const navigate = (id: string,satis:string,alis:string) => {
+    navigation.navigate("Detail", {id: id,satis:satis,alis:alis});
   };
 
   const onFavorite = (borsa:Crypto) => {
@@ -85,14 +89,18 @@ const dispatch=useDispatch();
   }
 
   const renderItem = ({ item }:{item:Crypto}) => {
+    if(currency.typeCurrency===item.Isim){
+      paraBirimi.paraBirimi=parseInt(item.Satis)
+      
+    }
     return (
       <View>
         <Pressable
-          onPress={() => navigate(item.Isim)}
+          onPress={() => navigate(item.Isim,item.Satis,item.Alis)}
           style={styles.buttonStyle}
         >
           <Text style={styles.textStyle}>{item.Isim}</Text>
-          <Text style={styles.rightText}>{item.Satis}</Text>
+          <Text style={styles.rightText}>{(parseFloat(item.Satis)/paraBirimi.paraBirimi).toFixed(4)}</Text>
 
           <Pressable onPress={() => ifExists(item)?dispatch(RemoveFavorite(item)) : dispatch(addFavorite(item)) }>
             <MaterialIcons

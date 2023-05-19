@@ -1,7 +1,8 @@
-import { FavoriteState,SubeState,informationsState,typeCurrencyState,typeState,userState } from "./models";
-import { FavoriteActionsTypes,ADD_FAVORİTE,REMOVE_FAVORİTE, userActionTypes, LOG_IN, nextActionTypes, NEXT, typeActionTypes, TYPE, typeCurrencyActionTypes, TYPE_CURRENCY, SubeActionTypes,SUBE } from "./actionTypes";
+import { BakiyeState, FavoriteState,ParaBirimitate,SubeState,TiklananParaState,informationsState,typeCurrencyState,typeState,userState } from "./models";
+import { FavoriteActionsTypes,ADD_FAVORİTE,REMOVE_FAVORİTE, userActionTypes, LOG_IN, nextActionTypes, NEXT, typeActionTypes, TYPE, typeCurrencyActionTypes, TYPE_CURRENCY, SubeActionTypes,SUBE, BakiyeActionTypes, BAKIYE, ParaBirimiActionTypes, PARA_BIRIMI, TiklananParaActionTypes, TIKLANAN_PARA } from "./actionTypes";
 import { useState } from "react";
-import { Crypto } from "../../models/crypto";
+import { Crypto, Tiklanan } from "../../models/crypto";
+import { act } from "react-test-renderer";
 const initialState:FavoriteState={
     favorites:[],
 };
@@ -21,6 +22,16 @@ const typeCurrencyInitialState:typeCurrencyState={
 }
 const subeInitialState:SubeState={
     Sube:"",
+}
+const bakiyeInitialState:BakiyeState={
+    bakiye:1000
+}
+const paraBirimiInitialState:ParaBirimitate={
+    paraBirimi:1
+}
+
+const TiklananParaInitialState:TiklananParaState={
+    tiklanan:[]
 }
 export function favoriteReducer(
    state=initialState,
@@ -110,6 +121,51 @@ export function SubeReducer(
         case SUBE:
             return{
                 Sube:action.payload
+            }
+            default:
+                return state
+    };
+};
+
+export function BakiyeReducer(
+    state=bakiyeInitialState,
+    action:BakiyeActionTypes
+):BakiyeState{
+    switch(action.type){
+        case BAKIYE:
+            return{
+                bakiye:action.payload
+            }
+            default:
+                return state
+    };
+};
+
+export function ParaBirimiReducer(
+    state=paraBirimiInitialState,
+    action:ParaBirimiActionTypes
+):ParaBirimitate{
+    switch(action.type){
+        case PARA_BIRIMI:
+            return{
+                paraBirimi:action.payload
+            }
+            default:
+                return state
+    };
+};
+
+export function TiklananParaReducer(
+    state=TiklananParaInitialState,
+    action:TiklananParaActionTypes
+
+):TiklananParaState{
+    switch(action.type){
+        case TIKLANAN_PARA:
+            return{
+                
+                tiklanan:state.tiklanan.concat(action.payload)
+
             }
             default:
                 return state

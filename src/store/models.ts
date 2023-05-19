@@ -1,4 +1,4 @@
-import { Crypto } from "../../models/crypto";
+import { Crypto, Tiklanan } from "../../models/crypto";
 
 
 export interface Favorites{
@@ -35,3 +35,16 @@ export interface typeCurrencyState{
 export interface SubeState{
     Sube:string
 }
+
+export interface BakiyeState{
+    bakiye:number
+}
+
+export interface ParaBirimitate{
+    paraBirimi:number
+}
+
+export interface TiklananParaState{
+    tiklanan:string[]
+}
+

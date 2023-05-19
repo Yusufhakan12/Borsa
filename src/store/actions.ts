@@ -1,5 +1,5 @@
-import { FavoriteActionsTypes,userActionTypes,ADD_FAVORİTE,REMOVE_FAVORİTE,LOG_IN,NEXT, nextActionTypes, typeActionTypes, TYPE,TYPE_CURRENCY, typeCurrencyActionTypes,SubeActionTypes, SUBE } from "./actionTypes";
-import { Crypto } from "../../models/crypto";
+import { FavoriteActionsTypes,userActionTypes,ADD_FAVORİTE,REMOVE_FAVORİTE,LOG_IN,NEXT, nextActionTypes, typeActionTypes, TYPE,TYPE_CURRENCY, typeCurrencyActionTypes,SubeActionTypes, SUBE, BakiyeActionTypes, BAKIYE,PARA_BIRIMI, ParaBirimiActionTypes, TiklananParaActionTypes, TIKLANAN_PARA } from "./actionTypes";
+import { Crypto, Tiklanan } from "../../models/crypto";
 import { informationsState,infoModel } from "./models";
 
  export function addFavorite(newFavorite:Crypto):
@@ -57,6 +57,29 @@ import { informationsState,infoModel } from "./models";
     return{
         type:SUBE,
         payload:type
-    }
- }
+    };
+ };
  
+ export function Bakiye(type:number):
+ BakiyeActionTypes{
+    return{
+        type:BAKIYE,
+        payload:type
+    };
+ };
+
+ export function ParaBirimi(type:number):
+ ParaBirimiActionTypes{
+    return{
+        type:PARA_BIRIMI,
+        payload:type
+    };
+ };
+
+ export function TiklananPara(type:string):
+ TiklananParaActionTypes{
+    return{
+        type:TIKLANAN_PARA,
+        payload:type
+    };
+ };

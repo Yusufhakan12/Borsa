@@ -12,6 +12,7 @@ type AppProps=ReturnType<typeof mapStateToProps>
 */
 
 const Favorite = () => {
+  const paraBirimi=useSelector((state:RootState)=>state.paraBirimi)
   const myFavList = useSelector((state: RootState) => state.fav);
   const map = myFavList.favorites.map(item => {
     return {
@@ -51,7 +52,7 @@ const Favorite = () => {
         return (
           <View style={styles.container}>
             <Text style={styles.textStyle}>{item.Isim}</Text>
-            <Text style={styles.rightText}>{item.Satis}</Text>
+            <Text style={styles.rightText}>{(parseFloat(item.Satis)/paraBirimi.paraBirimi).toFixed(4)}</Text>
           </View>
         );
       }}

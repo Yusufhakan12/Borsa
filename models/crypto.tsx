@@ -6,3 +6,7 @@ export interface Crypto{
     Alis:string
     
 };
+
+export interface Tiklanan{
+    Isim:string
+}
