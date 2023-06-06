@@ -1,5 +1,5 @@
-import { BakiyeState, FavoriteState,ParaBirimitate,SubeState,TiklananParaState,informationsState,typeCurrencyState,typeState,userState } from "./models";
-import { FavoriteActionsTypes,ADD_FAVORİTE,REMOVE_FAVORİTE, userActionTypes, LOG_IN, nextActionTypes, NEXT, typeActionTypes, TYPE, typeCurrencyActionTypes, TYPE_CURRENCY, SubeActionTypes,SUBE, BakiyeActionTypes, BAKIYE, ParaBirimiActionTypes, PARA_BIRIMI, TiklananParaActionTypes, TIKLANAN_PARA } from "./actionTypes";
+import { BakiyeState, DilState, FavoriteState,ParaBirimitate,SubeState,TiklananParaState,informationsState,typeCurrencyState,typeState,userState } from "./models";
+import { FavoriteActionsTypes,ADD_FAVORİTE,REMOVE_FAVORİTE, userActionTypes, LOG_IN, nextActionTypes, NEXT, typeActionTypes, TYPE, typeCurrencyActionTypes, TYPE_CURRENCY, SubeActionTypes,SUBE, BakiyeActionTypes, BAKIYE, ParaBirimiActionTypes, PARA_BIRIMI, TiklananParaActionTypes, TIKLANAN_PARA, DilActionTypes, DIL } from "./actionTypes";
 import { useState } from "react";
 import { Crypto, Tiklanan } from "../../models/crypto";
 import { act } from "react-test-renderer";
@@ -33,6 +33,10 @@ const paraBirimiInitialState:ParaBirimitate={
 const TiklananParaInitialState:TiklananParaState={
     tiklanan:[]
 }
+const DilInitialState:DilState={
+    dil:false
+}
+
 export function favoriteReducer(
    state=initialState,
     action:FavoriteActionsTypes,
@@ -166,6 +170,20 @@ export function TiklananParaReducer(
                 
                 tiklanan:state.tiklanan.concat(action.payload)
 
+            }
+            default:
+                return state
+    }
+}
+
+export function DilReducer(
+    state=DilInitialState,
+    action:DilActionTypes
+):DilState{
+    switch(action.type){
+        case DIL:
+            return{
+                dil:action.payload
             }
             default:
                 return state

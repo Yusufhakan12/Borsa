@@ -11,6 +11,7 @@ export const SUBE="SUBE";
 export const BAKIYE="BAKIYE";
 export const PARA_BIRIMI="PARA_BIRIMI";
 export const TIKLANAN_PARA="TIKLANAN_PARA";
+export const DIL="DIL";
 
 interface AddFavoriteAction{
     type:typeof ADD_FAVORİTE;
@@ -60,6 +61,10 @@ interface TiklananPara{
     type:typeof TIKLANAN_PARA
     payload:string
 }
+interface Dil{
+    type:typeof DIL
+    payload:boolean
+}
 
 export type FavoriteActionsTypes=AddFavoriteAction|RemoveFavorite;
 export type userActionTypes=Login;
@@ -70,3 +75,4 @@ export type SubeActionTypes=Sube;
 export type BakiyeActionTypes=Bakiye;
 export type ParaBirimiActionTypes=ParaBirimi;
 export type TiklananParaActionTypes=TiklananPara;
+export type DilActionTypes=Dil;

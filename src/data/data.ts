@@ -28,6 +28,10 @@ export const HESAP=[
 
 export const DOVİZ=[
     {
+        key:'23',
+        value:'Türk Lirası'
+    },
+    {
         key:'1',
         value:'ABD DOLARI'
     },

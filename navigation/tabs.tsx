@@ -17,6 +17,7 @@ import ProfileScreen from "../screens/profileScreen"
 import OnayliyorumScreen from "../screens/GirisEkran/createAccount.tsx/onayliyorumScreen"
 import { useSelector } from "react-redux"
 import { RootState } from "../src/store"
+import EkstraHesap from "../screens/GirisEkran/createAccount.tsx/ekstraHesap"
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
 
@@ -71,6 +72,7 @@ const Sign=()=>{
         headerTitleAlign:"center"
       }}
       />
+      
     </Stack.Navigator>
   );
 }
@@ -98,6 +100,12 @@ const Homestack = () => {
         headerTitleAlign:"center"
       }}
       
+      />
+      <Stack.Screen name="EkstraHesap" component={EkstraHesap}
+       options={{
+       
+        headerTitleAlign:"center"
+      }}
       />
       </Stack.Navigator>
     );

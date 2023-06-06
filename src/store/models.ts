@@ -47,4 +47,7 @@ export interface ParaBirimitate{
 export interface TiklananParaState{
     tiklanan:string[]
 }
+export interface DilState{
+    dil:boolean
+}
 

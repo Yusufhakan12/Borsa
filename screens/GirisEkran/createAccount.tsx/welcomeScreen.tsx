@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { Text, View,StyleSheet } from "react-native";
+import { Text, View,StyleSheet,Appearance } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import CustomButton from "../customBottom";
 import { HESAP } from "../../../src/data/data";
@@ -7,13 +7,18 @@ import { RootState } from "../../../src/store";
 import CustomSelect from "./component/customSelect";
 import { Type } from "../../../src/store/actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SignInScreenDark } from "../../component/darkMode";
+import { SIGNINTRANSLATION } from "../../../langauge/langauge";
 const WelcomeScreen=({navigation}:{navigation:any})=>{
     const [category,setCategory]=useState("")
     const [error,setError]=useState(false);
     const info=useSelector((state:RootState)=>state.info)
     const typeAccount=useSelector((state:RootState)=>state.type)
     const dispatch=useDispatch()
-
+    const langauge=useSelector((state:RootState)=>state.dil)
+    const [theme,setTheme]=useState(Appearance.getColorScheme())
+    Appearance.addChangeListener((scheme)=>
+    setTheme(scheme.colorScheme))
     const saveItem=async()=>{
         try {
             
@@ -49,26 +54,26 @@ const WelcomeScreen=({navigation}:{navigation:any})=>{
 
     //console.log(typeAccount)
     return(
-        <View >
+        <View style={theme=="light"?{backgroundColor:"white"}:{backgroundColor:"black",flex:1}} >
             <View style={{alignItems:"center",marginVertical:150}}>
-            <Text style={styles.welcomeText}>Welcome</Text>
-            <Text style={styles.Name}>{info.info}</Text>
-            <Text style={styles.subTitle}>Let's create an account now</Text>
+            <Text style={theme=="light"? styles.welcomeText:SignInScreenDark.welcomeText}>{langauge.dil===false?SIGNINTRANSLATION[12].Turkce:SIGNINTRANSLATION[12].English}</Text>
+            <Text style={theme=="light"? styles.Name:SignInScreenDark.Name}>{info.info}</Text>
+           
             </View>
             <CustomSelect
             data={HESAP}
             setSelected={setCategory}
             save="value"
             search={false}
-            placeholder="Bir Hesap seciniz"
+            placeholder={langauge.dil===false?SIGNINTRANSLATION[13].Turkce:SIGNINTRANSLATION[13].English}
             
             />
-        {error?<Text style={styles.error}>Boş geçilemez</Text>:null}
+        {error?<Text style={styles.error}>{langauge.dil===false?SIGNINTRANSLATION[5].Turkce:SIGNINTRANSLATION[5].English}</Text>:null}
         
         <View style={{alignItems:"center",}}>
         <CustomButton
         onpress={()=>{dispatch(Type(category));Next()}}
-        text="Next"
+        text={langauge.dil===false?SIGNINTRANSLATION[4].Turkce:SIGNINTRANSLATION[4].English}
         />
        
         </View>
@@ -87,11 +92,14 @@ const styles=StyleSheet.create({
     },
     subTitle:{
         fontFamily: "TiltWarp-Regular",
-        fontSize:12
+        fontSize:12,
+        color:"black"
+        
     },
     Name:{
         fontSize:23,
         fontFamily: "TiltWarp-Regular",
+        color:"black"
     },
     error:{
         marginLeft:40,

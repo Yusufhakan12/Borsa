@@ -14,6 +14,8 @@ const CustomSelect=({data,setSelected,save,search,placeholder}:any)=>{
         placeholder={placeholder}
         boxStyles={{borderRadius:15,width:370,margin:10}}
         dropdownStyles={{borderRadius:20,width:370,margin:10}}
+        inputStyles={{color:"gray"}}
+        dropdownTextStyles={{color:"gray"}}
         />
         </View>
     );

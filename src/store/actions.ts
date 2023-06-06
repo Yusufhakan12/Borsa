@@ -1,4 +1,4 @@
-import { FavoriteActionsTypes,userActionTypes,ADD_FAVORİTE,REMOVE_FAVORİTE,LOG_IN,NEXT, nextActionTypes, typeActionTypes, TYPE,TYPE_CURRENCY, typeCurrencyActionTypes,SubeActionTypes, SUBE, BakiyeActionTypes, BAKIYE,PARA_BIRIMI, ParaBirimiActionTypes, TiklananParaActionTypes, TIKLANAN_PARA } from "./actionTypes";
+import { FavoriteActionsTypes,userActionTypes,ADD_FAVORİTE,REMOVE_FAVORİTE,LOG_IN,NEXT, nextActionTypes, typeActionTypes, TYPE,TYPE_CURRENCY, typeCurrencyActionTypes,SubeActionTypes, SUBE, BakiyeActionTypes, BAKIYE,PARA_BIRIMI, ParaBirimiActionTypes, TiklananParaActionTypes, TIKLANAN_PARA,DIL, DilActionTypes } from "./actionTypes";
 import { Crypto, Tiklanan } from "../../models/crypto";
 import { informationsState,infoModel } from "./models";
 
@@ -83,3 +83,11 @@ import { informationsState,infoModel } from "./models";
         payload:type
     };
  };
+
+ export function Dil(type:boolean):
+ DilActionTypes{
+    return{
+        type:DIL,
+        payload:type
+    }
+ }

@@ -1,11 +1,15 @@
 import React from "react";
-import { View,StyleSheet,Text } from "react-native";
+import { View,StyleSheet,Text, Appearance } from "react-native";
 import CustonInput from "./customInput";
 import CustomButton from "./customBottom";
 import axios from "axios";
 import { useState } from "react";
 import { Auth } from "firebase/auth";
 import auth,{ FirebaseAuthTypes } from "@react-native-firebase/auth";
+import { SignInScreenDark } from "../component/darkMode";
+import { useSelector } from "react-redux";
+import { RootState } from "../../src/store";
+import { SIGNINTRANSLATION } from "../../langauge/langauge";
 const SignUpScreen2=({navigation}:{navigation:any})=>{
 
     const [password,setPassword]=useState('');
@@ -15,7 +19,10 @@ const SignUpScreen2=({navigation}:{navigation:any})=>{
     const [passworderror,setPasswordError]=useState(false);
     const [equalderror,setEqualError]=useState(false);
     const [exError,setExError]=useState(false);
-
+    const [theme,setTheme]=useState(Appearance.getColorScheme())
+    const langauge=useSelector((state:RootState)=>state.dil)
+    Appearance.addChangeListener((scheme)=>
+    setTheme(scheme.colorScheme))
     const onRegisterPressed=()=>{
 
         if(password!==passwordRepeat)
@@ -27,7 +34,7 @@ const SignUpScreen2=({navigation}:{navigation:any})=>{
             auth().createUserWithEmailAndPassword(mail,password)
             .then(userCredential=>{
              const user=userCredential.user;
-             
+             navigation.navigate("Welcome")
             }).catch(e=>{
              
                 if(passwordRepeat.length<6||password.length<6)
@@ -45,17 +52,19 @@ const SignUpScreen2=({navigation}:{navigation:any})=>{
                  }
 
             })
+           
         }
+        
       
     
 
 
         //console.log('Sign In')
-        navigation.navigate("Welcome")
+       
     }
    
     return(
-        <View style={styles.root}>
+        <View style={ theme=="light"? styles.root:SignInScreenDark.root}>
         <CustonInput
         placeholder="Email"
         value={mail}
@@ -63,28 +72,28 @@ const SignUpScreen2=({navigation}:{navigation:any})=>{
         secureTextEntry={false}
         
         />
-        {mailerror?<Text style={styles.error}>E-mail doğru formatta olmalı</Text>:null}
+        {mailerror?<Text style={styles.error}>{langauge.dil===false?SIGNINTRANSLATION[8].Turkce:SIGNINTRANSLATION[8].English}</Text>:null}
        
         <CustonInput
-         placeholder="Password"
+         placeholder={langauge.dil===false?SIGNINTRANSLATION[6].Turkce:SIGNINTRANSLATION[6].English}
          value={password}
          setValue={setPassword}
          secureTextEntry={true}
         />
-         {passworderror?<Text style={styles.error}>Şifre en az 6 karakterli olması gerekli</Text>:null}
+         {passworderror?<Text style={styles.error}>{langauge.dil===false?SIGNINTRANSLATION[9].Turkce:SIGNINTRANSLATION[9].English}</Text>:null}
          <CustonInput
-         placeholder="Password Repeat"
+         placeholder={langauge.dil===false?SIGNINTRANSLATION[7].Turkce:SIGNINTRANSLATION[7].English}
          value={passwordRepeat}
          setValue={setPasswordRepeat}
          secureTextEntry={true}
         />
 
-        {equalderror?<Text style={styles.error}>Parolalar aynı olmalı</Text>:null}
-        {exError?<Text style={styles.error}>Boyle bir kullanıc var</Text>:null}
+        {equalderror?<Text style={styles.error}>{langauge.dil===false?SIGNINTRANSLATION[10].Turkce:SIGNINTRANSLATION[10].English}</Text>:null}
+        {exError?<Text style={styles.error}>{langauge.dil===false?SIGNINTRANSLATION[11].Turkce:SIGNINTRANSLATION[11].English}</Text>:null}
 
          <CustomButton
         onpress={onRegisterPressed}
-        text="Register"
+        text={langauge.dil===false?SIGNINTRANSLATION[4].Turkce:SIGNINTRANSLATION[4].English}
         />
        
         </View>

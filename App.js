@@ -10,7 +10,7 @@ import { rootReducer } from './src/store';
 import store from './src/store';
 import SignInScreen from './screens/GirisEkran/SignInScreen';
 const Stack = createNativeStackNavigator();
- export const socket=io('http://10.7.86.9:3000');
+ export const socket=io('http://192.168.1.100:3000');
 socket.on('connect',()=>{
   console.log('connected');
 });

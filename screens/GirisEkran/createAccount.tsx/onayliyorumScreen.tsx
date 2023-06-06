@@ -1,19 +1,26 @@
-import React from "react";
-import {View, Text, Pressable, StyleSheet} from "react-native";
+import React, { useState } from "react";
+import {View, Text, Pressable, StyleSheet, Appearance} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../src/store";
+import { SignInScreenDark } from "../../component/darkMode";
+import { SIGNINTRANSLATION } from "../../../langauge/langauge";
 
 const OnayliyorumScreen = ({navigation}: {navigation: any}) => {
   const typeAccount = useSelector((state: RootState) => state.type);
   const currency = useSelector((state: RootState) => state.currency);
   const sube = useSelector((state: RootState) => state.sube);
+  const langauge=useSelector((state:RootState)=>state.dil)
+  const [theme,setTheme]=useState(Appearance.getColorScheme())
+  Appearance.addChangeListener((scheme)=>
+  setTheme(scheme.colorScheme))
   return (
-    <View style={{alignItems: "center", marginVertical: 240}}>
-      <View style={{alignSelf: "flex-start", marginLeft: 30}}>
-        <Text style={{fontFamily: "TiltWarp-Regular"}}>Hesap türü:</Text>
+    <View  style={theme=="light"? styles.OnayliyorumContainer:SignInScreenDark.OnayliyorumContainer} >
+      <View style={{alignItems: "center", marginVertical: 240}}>
+      <View style={styles.topTitle}>
+        <Text style={theme=="light"?styles.topText:SignInScreenDark.topText}>{langauge.dil===false?SIGNINTRANSLATION[16].Turkce:SIGNINTRANSLATION[16].English}</Text>
       </View>
 
-      <View style={styles.container}>
+      <View style={ theme=="light" ?styles.container:SignInScreenDark.containerBox}>
         <Text style={styles.title}>{typeAccount.type}</Text>
 
         <Pressable
@@ -22,13 +29,13 @@ const OnayliyorumScreen = ({navigation}: {navigation: any}) => {
           }}
           style={styles.button}
         >
-          <Text style={{fontFamily: "TiltWarp-Regular"}}>Duzenle</Text>
+          <Text style={{fontFamily: "TiltWarp-Regular"}}>{langauge.dil===false?SIGNINTRANSLATION[19].Turkce:SIGNINTRANSLATION[19].English}</Text>
         </Pressable>
       </View>
-      <View style={{alignSelf: "flex-start", marginLeft: 30}}>
-        <Text style={{fontFamily: "TiltWarp-Regular"}}>Döviz Cinsi:</Text>
+      <View style={styles.topTitle}>
+        <Text style={theme=="light"?styles.topText:SignInScreenDark.topText}>{langauge.dil===false?SIGNINTRANSLATION[17].Turkce:SIGNINTRANSLATION[17].English}</Text>
       </View>
-      <View style={styles.container}>
+      <View style={theme=="light" ?styles.container:SignInScreenDark.containerBox}>
         <Text style={styles.title}>{currency.typeCurrency}</Text>
 
         <Pressable
@@ -37,13 +44,13 @@ const OnayliyorumScreen = ({navigation}: {navigation: any}) => {
             navigation.navigate("Doviz");
           }}
         >
-          <Text style={{fontFamily: "TiltWarp-Regular"}}>Duzenle</Text>
+          <Text style={{fontFamily: "TiltWarp-Regular"}}>{langauge.dil===false?SIGNINTRANSLATION[19].Turkce:SIGNINTRANSLATION[19].English}</Text>
         </Pressable>
       </View>
-      <View style={{alignSelf: "flex-start", marginLeft: 30}}>
-        <Text style={{fontFamily: "TiltWarp-Regular"}}>Şube:</Text>
+      <View style={styles.topTitle}>
+        <Text style={theme=="light"?styles.topText:SignInScreenDark.topText}>{langauge.dil===false?SIGNINTRANSLATION[18].Turkce:SIGNINTRANSLATION[18].English}</Text>
       </View>
-      <View style={styles.container}>
+      <View style={theme=="light" ?styles.container:SignInScreenDark.containerBox}>
         <Text style={styles.title}>{sube.Sube}</Text>
 
         <Pressable
@@ -52,7 +59,7 @@ const OnayliyorumScreen = ({navigation}: {navigation: any}) => {
             navigation.navigate("Sube");
           }}
         >
-          <Text style={{fontFamily: "TiltWarp-Regular"}}>Duzenle</Text>
+          <Text style={{fontFamily: "TiltWarp-Regular"}}>{langauge.dil===false?SIGNINTRANSLATION[19].Turkce:SIGNINTRANSLATION[19].English}</Text>
         </Pressable>
       </View>
 
@@ -70,9 +77,10 @@ const OnayliyorumScreen = ({navigation}: {navigation: any}) => {
               fontSize: 17,
             }}
           >
-            Kaydet
+            {langauge.dil===false?SIGNINTRANSLATION[20].Turkce:SIGNINTRANSLATION[20].English}
           </Text>
         </Pressable>
+      </View>
       </View>
     </View>
   );
@@ -101,6 +109,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginVertical: 4,
+    
   },
   saveButton: {
     backgroundColor: "red",
@@ -112,5 +121,16 @@ const styles = StyleSheet.create({
     marginRight:27,
     marginVertical:5
   },
+  OnayliyorumContainer:{
+    flex:1
+  },
+  topTitle:{
+    alignSelf: "flex-start",
+     marginLeft: 30
+  },
+
+  topText:{
+    fontFamily: "TiltWarp-Regular"
+  }
 });
 export default OnayliyorumScreen;

@@ -8,22 +8,23 @@ import { Crypto } from "../models/crypto"
 import { containsKey, getData, removeItem, storeData } from "../storage"
 import {useDispatch,useSelector} from "react-redux";
 import { RootState } from "../src/store"
-//navigation uyarısını silmek için any yazdık
+import SQLite from 'react-native-sqlite-storage'
 
-/** 
-const mapStateToProps=(state:RootState)=>({
-  fav:state.fav,
-});
-*/
-//type AppProps=ReturnType<typeof mapStateToProps>
-
-
-
+const db = SQLite.openDatabase(
+  {
+      name: 'DovizDb',
+      
+  },
+  () => { },
+  error => { console.log(error) }
+);
 const Home = ({ navigation }:{navigation:any} ) => {
-  const deneme=1
   const myFavList=useSelector((state:RootState)=>state.fav)
   const paraBirimi=useSelector((state:RootState)=>state.paraBirimi)
-  const currency=useSelector((state:RootState)=>state.currency)
+  //const currency=useSelector((state:RootState)=>state.currency)
+  const [currency,setcurrency]=useState("");
+  const [cryptoList, setCrypto] = useState();
+  const dispatch=useDispatch();
   const map=myFavList.favorites.map((item)=>{
     return{
       Isim:item.Isim,
@@ -32,11 +33,6 @@ const Home = ({ navigation }:{navigation:any} ) => {
     }
    })
     
-const dispatch=useDispatch();
-
-  const [cryptoList, setCrypto] = useState();
-  //const [favoriteList, setFavoriteList] = useState<any[]>([]);
-  //const [ favorite1, setFav ] = useState<any[]>([]);
 
 
   useEffect(() => {
@@ -45,6 +41,42 @@ const dispatch=useDispatch();
     })
   }, [])
   
+
+  useEffect(() => {
+    getData();
+}, []);
+
+const getData = () => {
+    try {
+     
+        db.transaction((tx) => {
+            tx.executeSql(
+                "SELECT Name FROM DovizTur",
+                [],
+                (tx, results) => {
+                    var len = results.rows.length;
+                   
+                      var Name = results.rows.item(0).Name;
+                      console.log(Name)
+                      setcurrency(Name);
+                    
+                        
+                        
+                        
+                    
+                }
+            )
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+
+
+
+
 
  const navigate = (id: string,satis:string,alis:string) => {
     navigation.navigate("Detail", {id: id,satis:satis,alis:alis});
@@ -70,12 +102,7 @@ const dispatch=useDispatch();
     */
     
   }
-/** 
-  const onRemoveFavorite = (borsa:Crypto) => {
-    const filteredList = favorite1.filter(item => item.Isim !== borsa.Isim)
-    setFav(filteredList)
-  }
-*/
+
   const ifExists = (borsa:Crypto) => {
    
     //const hasFav= containsKey(borsa.Isim);
@@ -89,7 +116,7 @@ const dispatch=useDispatch();
   }
 
   const renderItem = ({ item }:{item:Crypto}) => {
-    if(currency.typeCurrency===item.Isim){
+    if(currency===item.Isim){
       paraBirimi.paraBirimi=parseInt(item.Satis)
       
     }
