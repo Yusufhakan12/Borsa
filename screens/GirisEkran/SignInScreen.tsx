@@ -8,6 +8,7 @@ import auth,{ FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { Dil, Login } from "../../src/store/actions";
 import { SignInScreenDark } from "../component/darkMode";
 import { SIGNINTRANSLATION } from "../../langauge/langauge";
+import LottieView from 'lottie-react-native'
 const SignInScreen=({navigation}:{navigation:any})=>{
 const dispatch=useDispatch();
 
@@ -64,7 +65,7 @@ setError(true);
     
 }
 const onCreateAccount=()=>{
-    //navigation.navigate("Signup")
+    //navigation.navigate("Welcome")
     navigation.navigate("Signup")
 }
 
@@ -73,7 +74,11 @@ const onCreateAccount=()=>{
        
         <View style={theme==="light" ? styles.root:SignInScreenDark.root}>
 
-
+        <LottieView
+        source={require("../../assets/Lottie/stock.json")}
+        autoPlay
+        style={{height:190,width:190}}
+        />
             
            <CustonInput
            placeholder="E-mail"
@@ -112,9 +117,8 @@ const onCreateAccount=()=>{
             <Text style={theme==="light"?styles.text:SignInScreenDark.text}>{langauge.dil===false ?  SIGNINTRANSLATION[1].Turkce:SIGNINTRANSLATION[1].English}</Text>
            </Pressable>
 
-               <View style={{marginTop:390}}>
+               <View style={{marginTop:590 ,position:"absolute"}}>
             <View style={{
-                width:'85%',
                 height:40,
                 borderWidth:0.5,
                 backgroundColor:'white',
@@ -129,7 +133,7 @@ const onCreateAccount=()=>{
                 style={{
                     width:60,
                     height:30,
-                    backgroundColor: langauge.dil===false? 'yellow':'white',
+                    backgroundColor: langauge.dil===false? '#00CCFF':'white',
                     borderRadius:15,
                     justifyContent:'center',
                     alignItems:'center'
@@ -144,7 +148,7 @@ const onCreateAccount=()=>{
                 style={{
                     width:60,
                     height:30,
-                    backgroundColor:langauge.dil===true ? 'yellow':'white',
+                    backgroundColor:langauge.dil===true ? '#00CCFF':'white',
                     borderRadius:15,
                     justifyContent:'center',
                     alignItems:'center'
@@ -178,7 +182,8 @@ const styles=StyleSheet.create({
     root:{
         alignItems:"center",
         padding:20,
-        flex:1
+        flex:1,
+        margin:4
         
     },
     error:{

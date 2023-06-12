@@ -9,6 +9,7 @@ import { Type } from "../../../src/store/actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SignInScreenDark } from "../../component/darkMode";
 import { SIGNINTRANSLATION } from "../../../langauge/langauge";
+import LottieView from 'lottie-react-native'
 const WelcomeScreen=({navigation}:{navigation:any})=>{
     const [category,setCategory]=useState("")
     const [error,setError]=useState(false);
@@ -55,8 +56,15 @@ const WelcomeScreen=({navigation}:{navigation:any})=>{
     //console.log(typeAccount)
     return(
         <View style={theme=="light"?{backgroundColor:"white"}:{backgroundColor:"black",flex:1}} >
-            <View style={{alignItems:"center",marginVertical:150}}>
-            <Text style={theme=="light"? styles.welcomeText:SignInScreenDark.welcomeText}>{langauge.dil===false?SIGNINTRANSLATION[12].Turkce:SIGNINTRANSLATION[12].English}</Text>
+            <View style={{alignItems:"center"}}>
+            <LottieView
+            source={require("../../../assets/Lottie/welcome.json")}
+            autoPlay
+            style={{height:290,width:290}}
+            
+            />
+
+           
             <Text style={theme=="light"? styles.Name:SignInScreenDark.Name}>{info.info}</Text>
            
             </View>

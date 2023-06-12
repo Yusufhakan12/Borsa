@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Text, View, Pressable, StyleSheet } from "react-native"
+import { Text, View, Pressable, StyleSheet, Appearance } from "react-native"
 import { FlatList } from "react-native"
 import { socket } from "../App"
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
@@ -25,6 +25,9 @@ const Home = ({ navigation }:{navigation:any} ) => {
   const [currency,setcurrency]=useState("");
   const [cryptoList, setCrypto] = useState();
   const dispatch=useDispatch();
+  const [theme,setTheme]=useState(Appearance.getColorScheme())
+  Appearance.addChangeListener((scheme)=>
+  setTheme(scheme.colorScheme))
   const map=myFavList.favorites.map((item)=>{
     return{
       Isim:item.Isim,
@@ -121,7 +124,7 @@ const getData = () => {
       
     }
     return (
-      <View>
+      <View style={{backgroundColor:"black"}} >
         <Pressable
           onPress={() => navigate(item.Isim,item.Satis,item.Alis)}
           style={styles.buttonStyle}
@@ -145,22 +148,28 @@ const getData = () => {
   }
 
   return (
+    
+
+   
     <FlatList
       data={cryptoList}
       keyExtractor={item => item.Isim}
       renderItem={renderItem}
     />
+    
   )
 }
 
 const styles = StyleSheet.create({
   buttonStyle: {
     backgroundColor: "black",
-    margin: 2,
-    borderRadius: 5,
+    margin: 3,
+    borderRadius: 2,
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 7
+    padding: 7,
+    borderColor:"gray",
+    borderWidth:1
   },
   textStyle: {
     fontSize: 14,

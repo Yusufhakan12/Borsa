@@ -382,7 +382,7 @@ const setData = async (aktarilanBakiye:number) => {
 
  
   return (
-    <View style={{backgroundColor:"black",position:"relative"}}>
+    <View style={{backgroundColor:"black",position:"relative",flex:1}}>
       <View style={{alignItems:"center"}}>
       <Text style={[styles.text,styles.text2]}>{id}</Text>
        

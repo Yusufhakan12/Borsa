@@ -1,10 +1,11 @@
 import React ,{useEffect, useState}from "react";
-import { StyleSheet, Text, View,TouchableOpacity,Pressable, FlatList } from "react-native";
+import { StyleSheet, Text, View,TouchableOpacity,Pressable, FlatList, Image,ImageBackground } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "../src/store";
 import Clipboard from "@react-native-clipboard/clipboard";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import SQLite from 'react-native-sqlite-storage'
+
 
 const db = SQLite.openDatabase(
     {
@@ -95,7 +96,10 @@ const getData = () => {
 
     return(
         <View>
-            <View style={{backgroundColor:"black",height:180,margin:5}}>
+            <ImageBackground
+            style={{marginTop:7,height:200}}
+            source={require("../assets/card-front.png")}
+            >
             <View style={{height:26,width:150,margin:9}}>
                 <Text style={[styles.text]} >{sube.Sube}</Text>
             </View>
@@ -128,13 +132,14 @@ const getData = () => {
                 </View>
                 
                 <Text style={[styles.text,{paddingLeft:286,position:"absolute"}]} >{alinanTur}</Text>
-                
+               
                 
 
             </View>
            
 
-            </View>
+            </ImageBackground>
+            
             <Text style={[styles.text,{fontSize:25,color:"black"}]}>Hesaplarım</Text>
             <View style={{flexDirection:"row",justifyContent:"space-between",marginTop:14}}>
                
@@ -154,13 +159,13 @@ const getData = () => {
                <View style={{marginRight:13}}>
                <FlatList
                data={alinanTask}
-               renderItem={({item})=>{return(<View style={{marginRight:2,backgroundColor:"black",marginVertical:4,height:30,borderRadius:1}}>{alinanTask?<Text style={[styles.text,{color:"green",}]}>{(item.Bakiye).toFixed(3)}</Text>:null}</View>)}}
+               renderItem={({item})=>{return(<View style={{marginRight:2,backgroundColor:"black",marginVertical:4,height:30,borderRadius:1}}>{alinanTask?<Text style={[styles.text,{color:"green",}]}>{(item.Bakiye)}</Text>:null}</View>)}}
                
                />
                </View>
                
             </View>
-
+            
             <View style={{alignItems:"center",margin:8,backgroundColor:"green",height:30,borderRadius:10,marginTop:55}}>
             <Pressable
             onPress={()=>navigation.navigate("EkstraHesap")}
@@ -173,7 +178,7 @@ const getData = () => {
 
             </View>
 
-
+            
         </View>
     );
 }

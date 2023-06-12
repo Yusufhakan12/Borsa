@@ -2,7 +2,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 
-import { Text, View } from "react-native"
+import { Appearance, Text, View } from "react-native"
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import Home from "../screens/Home"
 import Detail from "../screens/Detail"
@@ -18,15 +18,23 @@ import OnayliyorumScreen from "../screens/GirisEkran/createAccount.tsx/onayliyor
 import { useSelector } from "react-redux"
 import { RootState } from "../src/store"
 import EkstraHesap from "../screens/GirisEkran/createAccount.tsx/ekstraHesap"
+import { useState } from "react"
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
 
 const Sign=()=>{
-
+  const [theme,setTheme]=useState(Appearance.getColorScheme())
+  Appearance.addChangeListener((scheme)=>
+  setTheme(scheme.colorScheme))
   return(
     <Stack.Navigator
     screenOptions={{
-      headerTitleStyle: { fontFamily: "TiltWarp-Regular", fontSize: 25 }
+      headerTitleStyle:theme==="light"?  { fontFamily: "TiltWarp-Regular", fontSize: 25 }: { fontFamily: "TiltWarp-Regular", fontSize: 25,color:"white" },
+      headerStyle:{
+        backgroundColor:theme==="light"?"white":"black",
+      }
+      
+
     }}
     >
       <Stack.Screen name="SigIn" component={SignInScreen}
@@ -79,13 +87,22 @@ const Sign=()=>{
 
 
 const Homestack = () => {
-
+  const [theme,setTheme]=useState(Appearance.getColorScheme())
+  Appearance.addChangeListener((scheme)=>
+  setTheme(scheme.colorScheme))
    
       return(
       <Stack.Navigator
     
         screenOptions={{
-          headerTitleStyle: { fontFamily: "TiltWarp-Regular", fontSize: 25 }
+          headerTitleStyle:theme==="light"?  { fontFamily: "TiltWarp-Regular", fontSize: 25 }: { fontFamily: "TiltWarp-Regular", fontSize: 25,color:"white" },
+          headerStyle:{
+            backgroundColor:theme==="light"?"white":"black",
+            
+            
+          },
+
+        
         }}
       > 
       <Stack.Screen name="Borsa" component={Home} 
@@ -117,7 +134,9 @@ const Homestack = () => {
 
 const Tabs = () => {
   const isload=useSelector((state:RootState)=>state.us)
- 
+  const [theme,setTheme]=useState(Appearance.getColorScheme())
+  Appearance.addChangeListener((scheme)=>
+  setTheme(scheme.colorScheme))
   if(isload.user)
   {
     return (
@@ -126,11 +145,10 @@ const Tabs = () => {
         screenOptions={{
          headerShown:false,
           tabBarShowLabel: false,
-          
+          tabBarHideOnKeyboard:true,
           tabBarStyle: {
-            elevation: 0,
-            backgroundColor: "#ffffff",
-            borderRadius: 15,
+            
+            backgroundColor:theme==="light"?"#ffffff":"black" ,
             height: 60
           }
         }}

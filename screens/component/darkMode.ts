@@ -6,7 +6,8 @@ import {StyleSheet} from 'react-native'
         alignItems:"center",
         padding:20,
         backgroundColor:"black",
-        flex:1
+        flex:1,
+        paddingVertical:22
     },
     text:{
         color:"white"
