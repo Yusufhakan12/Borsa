@@ -12,7 +12,7 @@ const mapStateToProps=(state:RootState)=>({
 type AppProps=ReturnType<typeof mapStateToProps>
 */
 
-const Favorite = () => {
+const Favorite = ({navigation}:{navigation:any}) => {
   const paraBirimi=useSelector((state:RootState)=>state.paraBirimi)
   const myFavList = useSelector((state: RootState) => state.fav);
   const [theme,setTheme]=useState(Appearance.getColorScheme())
@@ -25,13 +25,15 @@ setTheme(scheme.colorScheme))
       Satis: item.Satis,
     };
   });
-
+  const navigate = (id: string,satis:string,alis:string) => {
+    navigation.navigate("Detail", {id: id,satis:satis,alis:alis});
+  };
   if (map.filter(item => item.Isim).length <= 0) {
     return (
-      <View  style={ theme==="light"?   { alignItems: "center"}: { alignItems: "center",backgroundColor:"black",flex:1}} >
+      <View  style={ theme==="light"?   { alignItems: "center",backgroundColor:"white",flex:1}: { alignItems: "center",backgroundColor:"black",flex:1}} >
       <View style={{marginTop: 263, alignItems: "center"}}>
         <LottieView
-        source={require("../assets/Lottie/like.json")}
+        source={theme==="light"?  require("../assets/Lottie/like.json"):require("../assets/Lottie/likeDark.json")}
         style={{height:90,width:90}}
         autoPlay
         />
@@ -61,10 +63,14 @@ setTheme(scheme.colorScheme))
       keyExtractor={i => i.Isim}
       renderItem={({item}) => {
         return (
-          <View style={ theme==="light"? styles.container:[styles.container,{borderColor:"gray",borderWidth:1,backgroundColor:"black"}]}>
+          <Pressable 
+          style={ theme==="light"? styles.container:[styles.container,{borderColor:"gray",borderWidth:1,backgroundColor:"black"}]}
+          onPress={()=>navigate(item.Isim,item.Satis,item.Alis)} >
+         
             <Text style={styles.textStyle}>{item.Isim}</Text>
             <Text style={styles.rightText}>{(parseFloat(item.Satis)/paraBirimi.paraBirimi).toFixed(4)}</Text>
-          </View>
+         
+          </Pressable>
         );
       }}
     />

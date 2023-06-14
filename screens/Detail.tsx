@@ -1,14 +1,15 @@
 import {useEffect, useState} from "react";
-import { StyleSheet, Text, View, Pressable, TextInput} from "react-native";
+import { StyleSheet, Text, View, Pressable, TextInput,Alert} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../src/store";
-import CustomSelect from "./GirisEkran/createAccount.tsx/component/customSelect";
-import CustomButton from "./GirisEkran/customBottom";
 import { Bakiye, TiklananPara } from "../src/store/actions";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DOVİZ } from "../src/data/data";
 import SQLite from 'react-native-sqlite-storage'
 import { SelectList } from "react-native-dropdown-select-list";
+import ModalScreen from "./component/ModallScreen";
+import ModalScreenError from "./component/ModalScreenError";
+import { useNavigation } from "@react-navigation/native";
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 const db = SQLite.openDatabase(
   {
@@ -21,6 +22,7 @@ const db = SQLite.openDatabase(
 
 
 const Detail = ({route}: {route: any}) => {
+  const navigation=useNavigation()
   const bakiye=useSelector((state:RootState)=>state.bakiye)
   const tiklanan=useSelector((state:RootState)=>state.tiklanan)
   const paraBirimi=useSelector((state:RootState)=>state.paraBirimi)
@@ -46,7 +48,29 @@ const Detail = ({route}: {route: any}) => {
   const [ID,setID]=useState(0);
   const [ID2,setID2]=useState(0)
   const [updateAktarilan,setUpdateAktarilan]=useState(0)
+ 
+ const [currentDate,setCurrentDate]=useState('');
+var sec=new Date().getSeconds()
+  const onPress=()=>{
   
+    setSucces(!succes)
+    //navigation.navigate('Borsa' as never);
+   }
+
+   const satisError=()=>{
+    setSatimError(!satimError)
+   }
+
+
+
+   useEffect(()=>{
+    var date=new Date().getDate()
+    var month=new Date().getMonth()+1
+    var year=new Date().getFullYear()
+    setCurrentDate(
+      date +'/' +month +'/'+ year
+    )
+   },[])
 useEffect(()=>{
 
   getData()
@@ -63,15 +87,91 @@ updateData()
 useEffect(()=>{
   
   
-  getDataBakiye()
   UpdateBuy()
   
-},[updateAktarilan,ID])
+},[updateAktarilan])
+useEffect(()=>{
+  
+        getDataBakiye()
+        
+    
+},[index,index2])
 
+
+const genaretePdf= async(total:any)=>{
+
+  try {
+    const html = `
+    <html>
+      <head>
+        <style>
+          body {
+            font-family: 'Helvetica';
+            font-size: 12px;
+          }
+          header, footer {
+            height: 50px;
+            background-color: #fff;
+            color: #000;
+            display: flex;
+            justify-content: center;
+            padding: 0 20px;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+          }
+          th, td {
+            border: 1px solid #000;
+            padding: 5px;
+          }
+          th {
+            background-color: #ccc;
+          }
+        </style>
+      </head>
+      <body>
+        <header>
+          <h1>Rapor</h1>
+        </header>
+        <h1>Order Details</h1>
+        <table>
+          <tr>
+            <th>Alınan tür</th>
+            <td>${id}</td> 
+          </tr>
+          <tr>
+            <th>Tarih</th>
+            <td>${currentDate}</td>
+          </tr>
+          <tr>
+            <th>Toplam değer</th>
+            <td>${total}</td>
+          </tr>
+        </table>
+        <footer>
+          <p>Bizi seçtiğiniz için teşekkür ederiz!</p>
+        </footer>
+      </body>
+    </html>
+  `;
+  const options = {
+    html,
+    fileName: `Rapor_${sec}`,
+    directory: 'Documents',
+  };
+  const file = await RNHTMLtoPDF.convert(options);
+  
+  
+}
+   catch (error) {
+    
+  }
+}
 const getDataBakiye=()=>{
   try  
   {
-    console.log(index2+"index")
+   
     db.transaction((tx) => {
     
       tx.executeSql(
@@ -84,11 +184,11 @@ const getDataBakiye=()=>{
           for (let i = 0; i < index; i++) {
            
             if(i===index-1)
-            {
-              var kontrolName = results.rows.item(i).Bakiye;
-              
+            { console.log("girdi2")
+              var kontrolName = results.rows.item(i).Bakiye;   
+              console.log(kontrolName+"kotro")
               setID(results.rows.item(i).ID)
-              
+              setSatilanBakiye(kontrolName)
              
             }
 
@@ -100,8 +200,8 @@ const getDataBakiye=()=>{
           {
             if(i===index2-1)
             {
+              console.log("girdi")
               var kontrolName = results.rows.item(i).Bakiye;
-              console.log(kontrolName)
               setSatilanBakiye(kontrolName);
               setID2(results.rows.item(i).ID)
               
@@ -136,7 +236,7 @@ const UpdateBuy=async()=>{
                   [updateAktarilan,ID],
                   
                   async (tx, result) => {
-                    console.log("Güncelleme başarılı");
+                    console.log("Güncelleme başarılı(updateBuy)");
                     await tx.executeSql("COMMIT", [], () => {
                       console.log("Commit işlemi başarılı");
                     });
@@ -184,27 +284,29 @@ const updateData =  async() => {
 const getData = () => {
     try  
     {
-    
+
       db.transaction((tx) => {
       
         tx.executeSql(
           "SELECT Name FROM DovizTur",
           [],
           (tx, results) => {
-            
+      
             var len = results.rows.length;
        
             for (let i = 0; i < len; i++) {
-              
+        
               var kontrolName = results.rows.item(i).Name;
               
               if (secilen === kontrolName) {
                 setIndex2(i)
                 setParaBirimiKontrol(false);
+          
               }
               if (aktarilan === kontrolName) {
                 setIndex(i)
                 setAktarilanKontrol(false);
+          
               }
             }
             // Promise'i tamamlandığını belirtmek için resolve çağırılır
@@ -259,12 +361,9 @@ const setData = async (aktarilanBakiye:number) => {
         {
           setError(!error)
         }
-        if(satimSayac<1)
-        {
+        
           setSatimError(!satimError)
-          
-        }
-       
+
         
       }
       else{
@@ -307,14 +406,18 @@ const setData = async (aktarilanBakiye:number) => {
 
   };
 
+const themeErrorFunction=()=>{
+  setError(!error)
+  //navigation.navigate('Borsa' as never)
 
+}
 
   const BuyFunction = (tutar:string) => {
     const intTutar=Number(parseFloat(tutar).toFixed(4))
-
+   
     try {
       
-   //getData()
+   //getDataBakiye()
      } catch (error) {
       console.log(error);
     } finally{
@@ -335,41 +438,27 @@ const setData = async (aktarilanBakiye:number) => {
     {
       
       if(intTutar>bakiye.bakiye)
-      { 
-        if(succes===true)
-        {
-          setSucces(!succes)
-        }
+      {     
         setError(!error)
         console.log("bakiye yetersiz")
       }
      
       else
-      {   setAlimSayac(alimSayac+1);
-        if(satimError)
-        {
-          setSatimError(!satimError)
-        }
-        if(error===true)
-        {
-          setError(!error)
-        }
-      
-        //setTask(id)
-      
+      {   
         
-        if(alimSayac<1)
-        {
+          genaretePdf(tutar)
           setSucces(!succes)
-          
-        }
-     
         const yeni=bakiye.bakiye-intTutar
    
         dispatch(Bakiye(yeni))
+        
      
-       const aktarilanBakiye=parseFloat((parseFloat(tutar)).toFixed(2)+parseFloat(satilanBakiye))/alis
+      
+       
+       const aktarilanBakiye=(parseFloat(tutar)+parseFloat(satilanBakiye))/alis
        setUpdateAktarilan(aktarilanBakiye)
+       
+      
       }
     }
   
@@ -408,9 +497,24 @@ const setData = async (aktarilanBakiye:number) => {
             />
        </View>
        <View style={{alignItems:"center",marginTop:25}}>
-        {error?<Text style={[styles.text,{color:"red"}]}>Bakiyeniz yetersiz!</Text>:null}
-        {succes?<Text style={[styles.text,{color:"green"}]}>İşlem başarılı</Text>:null}
-        {satimError?<Text style={[styles.text,{color:"red"}]}>Paranız yok</Text>:null}
+        {error
+        ? <ModalScreenError
+          visible={error}
+          onpress={themeErrorFunction}
+          text='Bakiye yetersiz'
+        />:null}
+        {succes?<ModalScreen
+          visible={succes}
+          onpress={onPress}
+        />:null}
+
+        {satimError?
+        <ModalScreenError
+        text="Böyle bir paranız yok "
+        visible={satimError}
+        onpress={satisError}
+        />
+        :null}
        </View>
       
        <View style={{alignItems:"center",marginVertical:20,}}>
@@ -473,7 +577,7 @@ const styles = StyleSheet.create({
     marginVertical:5,
     alignItems: "center",
     borderRadius: 5,
-    marginTop:90,
+    marginTop:98,
     
    
     
@@ -489,7 +593,7 @@ const styles = StyleSheet.create({
   Input:{
         borderRadius:5,
         borderWidth:1,
-        backgroundColor:"#F9FBFC",
+        backgroundColor:"gray",
         paddingHorizontal:10,
         paddingVertical:5,
        

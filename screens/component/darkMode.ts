@@ -60,6 +60,11 @@ import {StyleSheet} from 'react-native'
         marginVertical: 4,
         backgroundColor:"gray"
       },
+      containerEkstraHesap:{
+        alignItems:"center",
+        backgroundColor:"black",
+        flex:1
+      }
 
 })
 

@@ -5,6 +5,8 @@ import { DOVİZ } from "../../../src/data/data";
 import CustomButton from "../customBottom";
 import SQLite from 'react-native-sqlite-storage'
 import LottieView from 'lottie-react-native'
+import ModalScreen from "../../component/ModallScreen";
+import { SignInScreenDark } from "../../component/darkMode";
 const db=SQLite.openDatabase(
     {
         name:'DovizDb',
@@ -18,22 +20,26 @@ const bakiye=0;
 const [secilen,setSecilen]=useState("");
 const [term,setTerm]=useState(false)
 const [theme,setTheme]=useState(Appearance.getColorScheme())
-    Appearance.addChangeListener((scheme)=>
-    setTheme(scheme.colorScheme))
+Appearance.addChangeListener((scheme)=>
+setTheme(scheme.colorScheme))
 
     useEffect(() => {
-//createTable();
-//createTableBakiye()
-//getDataBakiye()
- //getData();
+createTable();
+createTableBakiye()
+getDataBakiye()
+ getData();
     }, []);
     
 const onAdd=()=>{
-    //setData()
-    //setDataBakiye()
+    setData()
+    setDataBakiye()
     //removeData()
     setTerm(!term)
     console.log("basildi")
+}
+const navigaitonPress=()=>{
+    setTerm(!term)
+    navigation.navigate("Borsa")
 }
 function handleOnPress() {
     setTerm(!term)
@@ -129,7 +135,7 @@ function handleOnPress() {
                     // );
                     await tx.executeSql(
                         "INSERT INTO Bakiyeler (Bakiye) VALUES (?)",
-                        [null]
+                        [0]
                     );
                 })
                 
@@ -209,7 +215,13 @@ function handleOnPress() {
 
     return(
 
-        <View style={{alignItems:"center"}}>
+        <View style={ theme==="light"? styles.container:SignInScreenDark.containerEkstraHesap}>
+
+            <LottieView
+            source={require("../../../assets/Lottie/wallet.json")}
+            autoPlay
+            style={{height:250,width:250}}
+            />
             <CustomSelect
             data={DOVİZ}
             setSelected={setSecilen}
@@ -227,43 +239,10 @@ function handleOnPress() {
             />
             </View>
 
-            <Modal animationType="slide" transparent={true} visible={term} >
-
-                <View style={styles.centeredView}>
-                    <View style={  styles.modalView}>
-                      
-                <LottieView 
-                source={require("../../../assets/Lottie/success.json")}
-                autoPlay
-                style={{height:140,width:140}}
-                />
-
-
-                    <View
-                  style={{
-                    marginTop:25,
-                    height: 39,
-                    backgroundColor: '#009B8D',
-                    width: 133,
-                    borderRadius: 28,
-                  }}>
-                  <TouchableOpacity onPress={handleOnPress} >
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        margin: 8,
-                        marginLeft: 50,
-                        color: 'white',
-                      }}>
-                      Apply
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                    </View>
-                </View>
-
-
-            </Modal>
+          <ModalScreen
+          visible={term}
+          onpress={navigaitonPress}
+          />
         </View>
       
     );
@@ -284,5 +263,9 @@ const styles=StyleSheet.create({
         padding: 35,
         alignItems: 'center',
       },
+      container:{
+        alignItems:"center",
+        flex:1
+      }
 })
 export default EkstraHesap;

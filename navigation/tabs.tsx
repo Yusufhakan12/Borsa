@@ -21,6 +21,9 @@ import EkstraHesap from "../screens/GirisEkran/createAccount.tsx/ekstraHesap"
 import { useState } from "react"
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
+  
+
+
 
 const Sign=()=>{
   const [theme,setTheme]=useState(Appearance.getColorScheme())
@@ -97,11 +100,11 @@ const Homestack = () => {
         screenOptions={{
           headerTitleStyle:theme==="light"?  { fontFamily: "TiltWarp-Regular", fontSize: 25 }: { fontFamily: "TiltWarp-Regular", fontSize: 25,color:"white" },
           headerStyle:{
-            backgroundColor:theme==="light"?"white":"black",
+          backgroundColor:theme==="light"?"white":"black",
             
             
           },
-
+            gestureEnabled:true
         
         }}
       > 
