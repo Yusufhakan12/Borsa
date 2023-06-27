@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {Text, View, Pressable, StyleSheet, Appearance} from "react-native";
+import {Text, View, Pressable, StyleSheet, Appearance,Alert} from "react-native";
 import {FlatList} from "react-native";
 import {socket} from "../App";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -9,7 +9,7 @@ import {containsKey, getData, removeItem, storeData} from "../storage";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../src/store";
 import SQLite from "react-native-sqlite-storage";
-
+import ModalScreenError from "./component/ModalScreenError";
 const db = SQLite.openDatabase(
   {
     name: "DovizDb",
@@ -26,6 +26,7 @@ const Home = ({navigation}: {navigation: any}) => {
   const [currency, setcurrency] = useState("");
   const [cryptoList, setCrypto] = useState();
   const dispatch = useDispatch();
+  const langauge = useSelector((state: RootState) => state.dil);
   const [theme, setTheme] = useState(Appearance.getColorScheme());
   Appearance.addChangeListener(scheme => setTheme(scheme.colorScheme));
   const map = myFavList.favorites.map(item => {
@@ -36,9 +37,11 @@ const Home = ({navigation}: {navigation: any}) => {
     };
   });
 
+ 
   useEffect(() => {
     socket.on("borsa", data => {
       setCrypto(data);
+  
     });
   }, []);
 
@@ -53,7 +56,7 @@ const Home = ({navigation}: {navigation: any}) => {
           var len = results.rows.length;
 
           var Name = results.rows.item(0).Name;
-          console.log(Name);
+         
           setcurrency(Name);
         });
       });
@@ -63,8 +66,36 @@ const Home = ({navigation}: {navigation: any}) => {
   };
 
   const navigate = (id: string, satis: string, alis: string) => {
-    navigation.navigate("Detail", {id: id, satis: satis, alis: alis});
+    const satis2=satis
+    const alis2=alis
+
+  
+
+
+    setTimeout(() => {
+      Alert.alert(
+        'Uyarı',
+         `Satis: ${(parseFloat(satis)/paraBirimi.paraBirimi).toFixed(3)}
+  Alis: ${(parseFloat(alis)/paraBirimi.paraBirimi).toFixed(3)}
+  fiyatıyla işlem yapacaksınz ` ,
+         
+        [
+          {
+            text: 'İptal',
+            style: 'cancel',
+          },
+          {
+            text: 'Tamam',
+            onPress: () => navigation.navigate("Detail", {id: id, satis: satis2, alis: alis2}),
+          },
+        ],
+        { cancelable: false }
+      );
+    }, 300);
+  
+    
   };
+  
 
   const ifExists = (borsa: Crypto) => {
     //const hasFav= containsKey(borsa.Isim);
@@ -86,7 +117,7 @@ const Home = ({navigation}: {navigation: any}) => {
           onPress={() => navigate(item.Isim, item.Satis, item.Alis)}
           style={styles.buttonStyle}
         >
-          <Text style={styles.textStyle}>{item.Isim}</Text>
+         {langauge.dil===false? <Text style={styles.textStyle}> {item.Isim}</Text>:<Text style={styles.textStyle}> {item.Name}</Text>}
           <Text style={styles.rightText}>
             {(parseFloat(item.Satis) / paraBirimi.paraBirimi).toFixed(4)}
           </Text>

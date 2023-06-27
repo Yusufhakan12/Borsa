@@ -11,7 +11,7 @@ import CustonInput from "./customInput";
 import CustomButton from "./customBottom";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../src/store";
-import auth, {FirebaseAuthTypes} from "@react-native-firebase/auth";
+import auth, {FirebaseAuthTypes, firebase} from "@react-native-firebase/auth";
 import {Dil, Login} from "../../src/store/actions";
 import {SignInScreenDark} from "../component/darkMode";
 import {SIGNINTRANSLATION} from "../../langauge/langauge";
@@ -29,9 +29,15 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
   const [select, setSelect] = useState(Boolean);
   Appearance.addChangeListener(scheme => setTheme(scheme.colorScheme));
   const onSignInPressed = async () => {
+
+
+    
+
     if (mail.length === 0 || password.length === 0) {
       console.log("asd");
-    } else {
+    }
+    
+    else {
       await auth()
         .signInWithEmailAndPassword(mail, password)
         .then(userCredential => {

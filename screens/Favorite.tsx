@@ -5,13 +5,6 @@ import {RootState} from "../src/store";
 import {useSelector} from "react-redux";
 import Lottie from 'lottie-react-native';
 import LottieView from 'lottie-react-native'
-/** 
-const mapStateToProps=(state:RootState)=>({
-  fav:state.fav,
-});
-type AppProps=ReturnType<typeof mapStateToProps>
-*/
-
 const Favorite = ({navigation}:{navigation:any}) => {
   const paraBirimi=useSelector((state:RootState)=>state.paraBirimi)
   const myFavList = useSelector((state: RootState) => state.fav);

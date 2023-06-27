@@ -6,6 +6,7 @@ import CustomButton from "../customBottom";
 import SQLite from 'react-native-sqlite-storage'
 import LottieView from 'lottie-react-native'
 import ModalScreen from "../../component/ModallScreen";
+import ModalScreenError from "../../component/ModalScreenError";
 import { SignInScreenDark } from "../../component/darkMode";
 const db=SQLite.openDatabase(
     {
@@ -19,7 +20,9 @@ const EkstraHesap=({navigation}:{navigation:any})=>{
 const bakiye=0;
 const [secilen,setSecilen]=useState("");
 const [term,setTerm]=useState(false)
+const [error,setError]=useState(Boolean);
 const [theme,setTheme]=useState(Appearance.getColorScheme())
+const [kontrol,setKontrol]=useState<any[]>([])
 Appearance.addChangeListener((scheme)=>
 setTheme(scheme.colorScheme))
 
@@ -29,21 +32,37 @@ createTableBakiye()
 getDataBakiye()
  getData();
     }, []);
+
+
+    useEffect(()=>{
+        for(let i=0;i<kontrol.length;i++)
+        {
+            if(kontrol[i]===secilen)
+            {
+                
+                setError(!error)
+                console.log(error)
+                console.log("olmadı")
+            }
+        }
+    },[secilen])
     
 const onAdd=()=>{
-    setData()
-    setDataBakiye()
-    //removeData()
-    setTerm(!term)
-    console.log("basildi")
+   
+    if(error===false)
+    {
+        setData()
+        setDataBakiye()
+        setTerm(!term)
+        console.log("basildi")
+    }
+    
 }
 const navigaitonPress=()=>{
     setTerm(!term)
     navigation.navigate("Borsa")
 }
-function handleOnPress() {
-    setTerm(!term)
-  }
+
 
     const createTable = () => {
         db.transaction((tx) => {
@@ -84,7 +103,21 @@ function handleOnPress() {
     }
     
 
-
+    const removeDatad = async () => {
+        try {
+            // await AsyncStorage.clear();
+            db.transaction((tx) => {
+                tx.executeSql(
+                    "DELETE FROM DovizTur",
+                    [],
+                  
+                    error => { console.log(error) }
+                )
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const getDataBakiye = () => {
         
@@ -119,7 +152,7 @@ function handleOnPress() {
 
 
     const setDataBakiye = async () => {
-        if (secilen.length == 0 ) {
+        if (secilen.length == 0 ||error) {
           console.log("boş")
         } else {
             try {
@@ -172,9 +205,11 @@ function handleOnPress() {
                         for(let i=0; i<len;i++)
                         {
                             var name=results.rows.item(i).Name;
-                            console.log(name)
+                            kontrol.push(name)
+                            
                         }
-                   
+                       
+                        
                        
                     }
                 )
@@ -186,7 +221,8 @@ function handleOnPress() {
 
 
     const setData = async () => {
-        if (secilen.length == 0 ) {
+       
+        if (secilen.length == 0 ||error) {
           console.log("boş")
         } else {
             try {
@@ -243,6 +279,11 @@ function handleOnPress() {
           visible={term}
           onpress={navigaitonPress}
           />
+          {error?<ModalScreenError
+          visible={error}
+          onpress={()=>{setError(!error) ,navigation.navigate("Borsa")} }
+          text="Böyle bir hesabınız zaten var"
+          />:null}
         </View>
       
     );

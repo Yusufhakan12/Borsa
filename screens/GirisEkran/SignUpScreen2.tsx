@@ -1,11 +1,11 @@
 import React from "react";
-import { View,StyleSheet,Text, Appearance } from "react-native";
+import { View,StyleSheet,Text, Appearance, Alert } from "react-native";
 import CustonInput from "./customInput";
 import CustomButton from "./customBottom";
 import axios from "axios";
 import { useState } from "react";
 import { Auth } from "firebase/auth";
-import auth,{ FirebaseAuthTypes } from "@react-native-firebase/auth";
+import auth,{ FirebaseAuthTypes, firebase } from "@react-native-firebase/auth";
 import { SignInScreenDark } from "../component/darkMode";
 import { useSelector } from "react-redux";
 import { RootState } from "../../src/store";
@@ -35,7 +35,16 @@ const SignUpScreen2=({navigation}:{navigation:any})=>{
             .then(userCredential=>{
              const user=userCredential.user;
              navigation.navigate("Welcome")
-            }).catch(e=>{
+            }).then(()=>{
+                firebase.auth().currentUser?.sendEmailVerification({
+                    handleCodeInApp:true,
+                    url:'https://yenibir-5d5e6.firebaseapp.com'
+                }).catch((err)=>{console.log(err)}).then(()=>{
+                    Alert.alert('send veri')
+                })
+            })
+            
+            .catch(e=>{
              
                 if(passwordRepeat.length<6||password.length<6)
                 {   

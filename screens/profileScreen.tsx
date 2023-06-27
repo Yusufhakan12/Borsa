@@ -9,6 +9,7 @@ import {
   Image,
   ImageBackground,
   Appearance,
+  SectionList,
 } from "react-native";
 import {useSelector} from "react-redux";
 import {RootState} from "../src/store";
@@ -16,6 +17,9 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import SQLite from "react-native-sqlite-storage";
 import LottieView from "lottie-react-native";
+import { socket } from "../App";
+import { Crypto } from "../models/crypto";
+import { SIGNINTRANSLATION } from "../langauge/langauge";
 
 const db = SQLite.openDatabase(
   {
@@ -36,13 +40,32 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
   const [task, setTask] = useState<any[]>([]);
   const [theme, setTheme] = useState(Appearance.getColorScheme());
   Appearance.addChangeListener(scheme => setTheme(scheme.colorScheme));
+  const langauge = useSelector((state: RootState) => state.dil);
+  const [filterData,setFilterData]=useState<any>()
+  const paraBirimi = useSelector((state: RootState) => state.paraBirimi);
+
+
+
+
+async function  fetchApi () {
+ await fetch(`http://10.100.100.124:3000`)
+  .then(response=>response.json())
+  .then(data=>{  JSON.stringify(data.filter((item:any)=>{item.Isim===JSON.parse(JSON.stringify(task[0])).Name ?setFilterData(JSON.stringify(item.ForexBuying)):null   }))})
+  .catch(err=>console.log(err))
+
+}
+
+useEffect(()=>{
+  fetchApi()
+},[task])
+
   useEffect(() => {
     const interval = setInterval(() => {
       getData();
       getDataDoviz();
-    }, 5000);
+    }, 2000);
     return () => {
-      clearInterval(interval); // setInterval'i temizle
+      clearInterval(interval); 
     };
   }, []);
 
@@ -54,11 +77,16 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
           var temp = [];
           var Name = results.rows.item(0).Name;
           setAlinanTur(Name);
+          
           for (let i = 1; i < len; i++) {
             var Name = results.rows.item(i).Name;
-
+            
             temp.push(results.rows.item(i));
+          
             setTask(temp);
+          
+            
+            
           }
         });
       });
@@ -124,7 +152,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
         >
           <View style={{flexDirection: "row"}}>
             <Text style={[styles.text]}>Bakiye:</Text>
-            <Text style={[styles.text]}>{bakiye.bakiye.toFixed(4)}</Text>
+            <Text style={[styles.text]}>{bakiye.bakiye.toFixed(3)}</Text>
           </View>
 
           <Text style={[styles.text, {paddingLeft: 286, position: "absolute"}]}>
@@ -141,7 +169,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
             : {fontSize: 25, color: "white"},
         ]}
       >
-        Hesaplarım
+       {langauge.dil===false?SIGNINTRANSLATION[21].Turkce:SIGNINTRANSLATION[21].English}
       </Text>
       <View
         style={{
@@ -187,7 +215,7 @@ const ProfileScreen = ({navigation}: {navigation: any}) => {
                 >
                   {alinanTask ? (
                     <Text style={[styles.text, {color: "green"}]}>
-                      {item.Bakiye}
+                       {(parseFloat(item.Bakiye)*(paraBirimi.paraBirimi/parseFloat(filterData))).toFixed(3)}
                     </Text>
                   ) : null}
                 </View>

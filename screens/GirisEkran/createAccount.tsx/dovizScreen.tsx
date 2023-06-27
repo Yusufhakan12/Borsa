@@ -19,7 +19,7 @@ const db=SQLite.openDatabase(
 );
 
 const DovizScreen=({navigation}:{navigation:any})=>{
-const [category,setCategory]=useState([""])
+const [category,setCategory]=useState("")
 const [error,setError]=useState(false);
 const langauge=useSelector((state:RootState)=>state.dil)
 const dispatch=useDispatch();
@@ -31,6 +31,10 @@ useEffect(() => {
     createTable();
     getData();
 }, []);
+useEffect(() => {
+    
+    getData();
+}, [category]);
 
 const createTable = () => {
     db.transaction((tx) => {
@@ -62,7 +66,7 @@ const getData = () => {
                     for(let i=0; i<len;i++)
                     {
                         var name=results.rows.item(i).Name;
-                        dispatch(TypeCurrency(name))
+                        
                         console.log(name)
                     }
                
@@ -98,13 +102,10 @@ const setData = async () => {
     if (category.length == 0 ) {
       console.log("boş")
     } else {
+        dispatch(TypeCurrency(category))
         try {
             console.log("başarılı")
-            // var user = {
-            //     Name: name,
-            //     Age: age
-            // }
-            // await AsyncStorage.setItem('UserData', JSON.stringify(user));
+         
             await db.transaction(async (tx) => {
                 // await tx.executeSql(
                 //     "INSERT INTO Users (Name, Age) VALUES ('" + name + "'," + age + ")"

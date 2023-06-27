@@ -3,8 +3,16 @@ import {View, Text, Pressable, StyleSheet, Appearance} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../src/store";
 import { SignInScreenDark } from "../../component/darkMode";
+import SQLite from 'react-native-sqlite-storage'
 import { SIGNINTRANSLATION } from "../../../langauge/langauge";
-
+const db=SQLite.openDatabase(
+  {
+      name:'DovizDb',
+     
+  },
+  ()=>{},
+  error=>{console.log(error)}
+);
 const OnayliyorumScreen = ({navigation}: {navigation: any}) => {
   const typeAccount = useSelector((state: RootState) => state.type);
   const currency = useSelector((state: RootState) => state.currency);
@@ -13,6 +21,22 @@ const OnayliyorumScreen = ({navigation}: {navigation: any}) => {
   const [theme,setTheme]=useState(Appearance.getColorScheme())
   Appearance.addChangeListener((scheme)=>
   setTheme(scheme.colorScheme))
+
+  const removeData = async () => {
+    try {
+        // await AsyncStorage.clear();
+        db.transaction((tx) => {
+            tx.executeSql(
+                "DELETE FROM DovizTur",
+                [],
+              
+                error => { console.log(error) }
+            )
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
   return (
     <View  style={theme=="light"? styles.OnayliyorumContainer:SignInScreenDark.OnayliyorumContainer} >
       <View style={{alignItems: "center", marginVertical: 240}}>
@@ -41,7 +65,9 @@ const OnayliyorumScreen = ({navigation}: {navigation: any}) => {
         <Pressable
           style={styles.button}
           onPress={() => {
+            removeData()
             navigation.navigate("Doviz");
+            
           }}
         >
           <Text style={{fontFamily: "TiltWarp-Regular"}}>{langauge.dil===false?SIGNINTRANSLATION[19].Turkce:SIGNINTRANSLATION[19].English}</Text>

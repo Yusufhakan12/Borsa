@@ -22,9 +22,7 @@ const db = SQLite.openDatabase(
 
 
 const Detail = ({route}: {route: any}) => {
-  const navigation=useNavigation()
   const bakiye=useSelector((state:RootState)=>state.bakiye)
-  const tiklanan=useSelector((state:RootState)=>state.tiklanan)
   const paraBirimi=useSelector((state:RootState)=>state.paraBirimi)
   const dispatch=useDispatch()
   const [index,setIndex]=useState(Number);
@@ -41,26 +39,17 @@ const Detail = ({route}: {route: any}) => {
   const id = route.params.id;
   const satis=parseFloat((parseFloat(route.params.satis)/paraBirimi.paraBirimi).toFixed(4));
   const alis= parseFloat((parseFloat(route.params.alis)/paraBirimi.paraBirimi).toFixed(4)); 
-  const ifHave=tiklanan.tiklanan.indexOf(id);
-  const [satimSayac,setSatimSayac]=useState(0);
-  const [alimSayac,setAlimSayac]=useState(0);
   const [satilanBakiye,setSatilanBakiye]=useState("");
   const [ID,setID]=useState(0);
   const [ID2,setID2]=useState(0)
   const [updateAktarilan,setUpdateAktarilan]=useState(0)
- 
- const [currentDate,setCurrentDate]=useState('');
+  const [yanlisSecim,setYanlisSecim]=useState(false);
+  const [notFoundError,setNotFoundError]=useState(false);
+  const [anaParaHata,setAnaParaHata]=useState(false);
+  const [currentDate,setCurrentDate]=useState('');
+  const [anaPara,setAnaPara]=useState('');
+  const langauge = useSelector((state: RootState) => state.dil);
 var sec=new Date().getSeconds()
-  const onPress=()=>{
-  
-    setSucces(!succes)
-    //navigation.navigate('Borsa' as never);
-   }
-
-   const satisError=()=>{
-    setSatimError(!satimError)
-   }
-
 
 
    useEffect(()=>{
@@ -96,6 +85,9 @@ useEffect(()=>{
         
     
 },[index,index2])
+
+
+
 
 
 const genaretePdf= async(total:any)=>{
@@ -184,9 +176,9 @@ const getDataBakiye=()=>{
           for (let i = 0; i < index; i++) {
            
             if(i===index-1)
-            { console.log("girdi2")
+            { 
               var kontrolName = results.rows.item(i).Bakiye;   
-              console.log(kontrolName+"kotro")
+              
               setID(results.rows.item(i).ID)
               setSatilanBakiye(kontrolName)
              
@@ -200,7 +192,7 @@ const getDataBakiye=()=>{
           {
             if(i===index2-1)
             {
-              console.log("girdi")
+              
               var kontrolName = results.rows.item(i).Bakiye;
               setSatilanBakiye(kontrolName);
               setID2(results.rows.item(i).ID)
@@ -229,8 +221,8 @@ const UpdateBuy=async()=>{
          
          await db.transaction((tx) => {
          
-          console.log(updateAktarilan)
-          console.log(ID+"iceri")
+          
+          
               tx.executeSql(
                   "UPDATE Bakiyeler SET Bakiye=(?) WHERE ID=(?)",
                   [updateAktarilan,ID],
@@ -293,7 +285,8 @@ const getData = () => {
           (tx, results) => {
       
             var len = results.rows.length;
-       
+            var anaPara=results.rows.item(0).Name
+            setAnaPara(anaPara)
             for (let i = 0; i < len; i++) {
         
               var kontrolName = results.rows.item(i).Name;
@@ -355,42 +348,42 @@ const setData = async (aktarilanBakiye:number) => {
   const SellFunction = () => {
     
     if(paraBirimiKontrol||aktarilanKontrol)
-    { setSatimSayac(satimSayac+1)
-      console.log(satimSayac)
-      if(error)
-        {
-          setError(!error)
-        }
-        
+    { 
           setSatimError(!satimError)
 
         
-      }
+    }
+    else if(id!==secilen)
+    {
+      setYanlisSecim(!yanlisSecim)
+    }
+    else if(anaPara!==aktarilan)
+    {
+      setAnaParaHata(!anaParaHata)
+    }
       else{
-        if(error)
-        {
-          setError(!error)
-        }
+        
         if(tutar==="")
         {
           console.log("boş bırakılamaz")
         }
         else
         {
-          setSucces(!succes)
+          
           if(parseFloat(tutar)>parseFloat(satilanBakiye))
           {
-            console.log("yetersiz")
+           setError(!error)
           }
-          else{
-            
+          else
+          {
+            setSucces(!succes)
             const yeniBakiye=parseFloat(satilanBakiye)-parseFloat(tutar)//secilen hesaba
             
-            console.log(yeniBakiye+"asdasd")
+            
             
             setUpdateSatilenBakiye(yeniBakiye)
             
-            console.log(updateSatilanBakiye)
+            
             
             const updateBakiye=parseFloat(tutar)*satis //aktarilan hesaba
             dispatch(Bakiye(bakiye.bakiye+updateBakiye))
@@ -406,11 +399,7 @@ const setData = async (aktarilanBakiye:number) => {
 
   };
 
-const themeErrorFunction=()=>{
-  setError(!error)
-  //navigation.navigate('Borsa' as never)
 
-}
 
   const BuyFunction = (tutar:string) => {
     const intTutar=Number(parseFloat(tutar).toFixed(4))
@@ -431,7 +420,16 @@ const themeErrorFunction=()=>{
     else if(paraBirimiKontrol||aktarilanKontrol)
       {
         
-        console.log("böyle bir hesabınız bulunmamaktadır ")
+        setNotFoundError(!notFoundError)
+      }
+
+      else if(id!==aktarilan)
+      {
+        setYanlisSecim(!yanlisSecim)
+      }
+      else if(anaPara!==secilen)
+      {
+        setAnaParaHata(!anaParaHata)
       }
    
     else
@@ -440,7 +438,7 @@ const themeErrorFunction=()=>{
       if(intTutar>bakiye.bakiye)
       {     
         setError(!error)
-        console.log("bakiye yetersiz")
+      
       }
      
       else
@@ -497,26 +495,44 @@ const themeErrorFunction=()=>{
             />
        </View>
        <View style={{alignItems:"center",marginTop:25}}>
-        {error
-        ? <ModalScreenError
-          visible={error}
-          onpress={themeErrorFunction}
-          text='Bakiye yetersiz'
+        {error?
+        <ModalScreenError
+        visible={error}
+        onpress={()=>setError(!error)}
+        text='Bakiye yetersiz'
         />:null}
-        {succes?<ModalScreen
-          visible={succes}
-          onpress={onPress}
+        {succes?
+        <ModalScreen
+        visible={succes}
+        onpress={()=>setSucces(!succes)}
         />:null}
 
         {satimError?
         <ModalScreenError
         text="Böyle bir paranız yok "
         visible={satimError}
-        onpress={satisError}
+        onpress={()=>setSatimError(!satimError)}
         />
         :null}
+        {yanlisSecim?
+        <ModalScreenError
+        visible={yanlisSecim}
+        onpress={()=>setYanlisSecim(!yanlisSecim)}
+        text={<Text>Burada yalnız {id} ilgili işlem yapabilirsiniz</Text> }
+        />:null}
+        {notFoundError?
+        <ModalScreenError
+        visible={notFoundError}
+        onpress={()=>setNotFoundError(!notFoundError)}
+        text='Böyle bir hesabınız bulunmamaktadır'
+        />:null}
        </View>
-      
+        {anaParaHata?
+        <ModalScreenError
+        visible={anaParaHata}
+        onpress={()=>setAnaParaHata(!anaParaHata)}
+        text={<Text>Yalnızca {anaPara} aktarabilirsiniz</Text>}
+        />:null}
        <View style={{alignItems:"center",marginVertical:20,}}>
             <Text style={[styles.text2,{color:"white",paddingBottom:9}]}>Para birimi</Text>
             <SelectList
@@ -555,12 +571,12 @@ const themeErrorFunction=()=>{
       <Pressable style={styles.container}
       onPress={()=>SellFunction()}
       >
-          <Text style={styles.text}> Sell</Text>
+           {langauge.dil===false?  <Text style={styles.text}> Sat</Text>:<Text style={styles.text}> Sell</Text>}
         </Pressable>
         <Pressable 
         onPress={()=>  BuyFunction(tutar)}
         style={[styles.container, {backgroundColor: "green"}]}>
-          <Text style={styles.text}> Buy</Text>
+          {langauge.dil===false?  <Text style={styles.text}> Al</Text>:<Text style={styles.text}> Buy</Text>}
         </Pressable>
       </View>
       
